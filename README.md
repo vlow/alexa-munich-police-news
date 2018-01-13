@@ -2,7 +2,7 @@
 The "Münchner Polizei Pressemeldungen"-flash-briefing-skill for the Amazon Alexa.
 
 ## Introduction
-The police department of Munich releases insights about their recent operations publicly on their [http://www.polizei.bayern.de/muenchen/news/presse/aktuell/](website). This project reads the most
+The police department of Munich releases insights about their recent operations publicly on their [website](http://www.polizei.bayern.de/muenchen/news/presse/aktuell/). This project reads the most
 recent report into a cache table and returns it from there when called by the Amazon servers.
 
 ## Functional Principle
@@ -21,12 +21,16 @@ The Alexa App offers a "Read more..." option which will take the user to the ful
 ## Copyright Notice
 All content provided by this skill is property of the Munich police department:
 
+```
 Polizeipräsidium München
 Ettstr. 2
 80333 München
 Tel: 089/2910-0
+```
 
 The author's consent to the usage of the press reports is publicly available an can be viewed here:
-[https://twitter.com/PolizeiMuenchen/status/950999318051344384]
+https://twitter.com/PolizeiMuenchen/status/950999318051344384
+
+Other than providing the content processed by this skill, the police department has no further affiliation with this software.
 
 The source code is available under GPLv3.
