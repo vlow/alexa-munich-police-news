@@ -5,16 +5,16 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import de.turbocache3000.polizei.alexa.api.FlashBriefingConverter
 import de.turbocache3000.polizei.database.api.Database
 import de.turbocache3000.polizei.log.api.Logger
 import de.turbocache3000.polizei.scraper.api.News
-import java.time.ZoneOffset
-import java.util.*
 
 class DynamoDbDatabaseImpl(
         private val logger: Logger,
         region: Regions,
-        private val tableName: String
+        private val tableName: String,
+        private val flashBriefingConverter: FlashBriefingConverter
 ) : Database {
     private val mapper = ObjectMapper().registerModule(KotlinModule())
     private val client = AmazonDynamoDBClientBuilder.standard().withRegion(region).build()
@@ -27,7 +27,7 @@ class DynamoDbDatabaseImpl(
     }
 
     override fun write(news: News) {
-        val entities = toEntities(news)
+        val entities = flashBriefingConverter.convert(news)
         val json = mapper.writeValueAsString(entities)
 
         logger.debug("Writing JSON to database: {}", json)
@@ -36,17 +36,5 @@ class DynamoDbDatabaseImpl(
                 Columns.content to AttributeValue().withS(json)
         ))
         logger.debug("Wrote JSON to database")
-    }
-
-    private fun toEntities(news: News): List<Entity> {
-        return news.entries.mapIndexed { index, entry ->
-            Entity(
-                    UUID.randomUUID().toString(),
-                    news.date.atTime(0, 0, index).toInstant(ZoneOffset.UTC).toString(),
-                    entry.title,
-                    entry.body,
-                    news.uri.toString()
-            )
-        }
     }
 }

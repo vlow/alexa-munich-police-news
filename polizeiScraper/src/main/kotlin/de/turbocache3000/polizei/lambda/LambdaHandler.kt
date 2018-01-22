@@ -2,6 +2,7 @@ package de.turbocache3000.polizei.lambda
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent
+import de.turbocache3000.polizei.alexa.impl.FlashBriefingConverterImpl
 import de.turbocache3000.polizei.config.Configuration
 import de.turbocache3000.polizei.database.impl.DynamoDbDatabaseImpl
 import de.turbocache3000.polizei.log.impl.LamdbaLoggerImpl
@@ -20,7 +21,8 @@ class LambdaHandler {
 
             if (first != null) {
                 val news = scraper.scrapeNews(first)
-                val database = DynamoDbDatabaseImpl(logger, Configuration.region, Configuration.tableName)
+                val flashBriefingConverter = FlashBriefingConverterImpl()
+                val database = DynamoDbDatabaseImpl(logger, Configuration.region, Configuration.tableName, flashBriefingConverter)
 
                 database.write(news)
             }

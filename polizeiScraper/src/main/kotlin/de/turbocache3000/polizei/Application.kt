@@ -1,5 +1,6 @@
 package de.turbocache3000.polizei
 
+import de.turbocache3000.polizei.alexa.impl.FlashBriefingConverterImpl
 import de.turbocache3000.polizei.config.Configuration
 import de.turbocache3000.polizei.database.impl.DynamoDbDatabaseImpl
 import de.turbocache3000.polizei.log.impl.ConsoleLogger
@@ -14,7 +15,8 @@ fun main(args: Array<String>) {
     val first = index.entries.firstOrNull()
     if (first != null) {
         val news = newsScraper.scrapeNews(first)
-        val database = DynamoDbDatabaseImpl(ConsoleLogger, Configuration.region, Configuration.tableName)
+        val flashBriefingConverter = FlashBriefingConverterImpl()
+        val database = DynamoDbDatabaseImpl(ConsoleLogger, Configuration.region, Configuration.tableName, flashBriefingConverter)
         database.write(news)
     }
 }
