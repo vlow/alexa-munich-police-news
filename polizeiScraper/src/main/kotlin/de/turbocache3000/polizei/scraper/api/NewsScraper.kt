@@ -44,9 +44,10 @@ data class News(
 )
 
 /**
- * A news entry. Consists of a [title] and a [body].
+ * A news entry. Consists of an [id], a [title] and a [body].
  */
 data class NewsEntry(
+        val id: String,
         val title: String,
         val body: String
 )

@@ -10,7 +10,7 @@ class FlashBriefingConverterImpl : FlashBriefingConverter {
     override fun convert(news: News): List<FlashBriefingEntry> {
         return news.entries.mapIndexed { index, entry ->
             FlashBriefingEntry(
-                    UUID.randomUUID().toString(),
+                    entry.id,
                     news.date.atTime(0, 0, index).toInstant(ZoneOffset.UTC).toString(),
                     entry.title,
                     entry.body,
