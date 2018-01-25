@@ -39,7 +39,8 @@ class FlashBriefingConverterImpl(private val logger: Logger) : FlashBriefingConv
         val caption = titleExtractor.matchEntire(entryTitle)?.groups?.get(1)?.value ?: return body
 
         logger.debug("Extracted caption is '{}'", caption)
-        return "$caption: $body"
+        // Use a period to let Alexa's voice go down at the end of the title.
+        return "$caption. $body"
     }
 
     /**
