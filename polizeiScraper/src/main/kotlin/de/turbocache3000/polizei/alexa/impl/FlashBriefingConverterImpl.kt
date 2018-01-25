@@ -4,7 +4,6 @@ import de.turbocache3000.polizei.alexa.api.FlashBriefingConverter
 import de.turbocache3000.polizei.alexa.api.FlashBriefingEntry
 import de.turbocache3000.polizei.log.api.Logger
 import de.turbocache3000.polizei.scraper.api.News
-import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.*
@@ -68,6 +67,6 @@ class FlashBriefingConverterImpl(private val logger: Logger) : FlashBriefingConv
      */
     private fun generateIdForEntry(title: String, body: String): String {
         val entryText = title + body
-        return UUID.nameUUIDFromBytes(entryText.toByteArray(StandardCharsets.UTF_8)).toString()
+        return UUID.nameUUIDFromBytes(entryText.toByteArray(Charsets.UTF_8)).toString()
     }
 }
