@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- * This adapter reads preformated JSON from a DynamoDB table and returns
+ * This adapter reads pre-formatted JSON from a DynamoDB table and returns
  * it to the caller. It is generic in that way and could be used for other
  * flash briefing skills by only adjusting the TABLE_NAME constant.
  */
