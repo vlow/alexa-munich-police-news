@@ -23,15 +23,12 @@ class DynamoDbDatabaseImpl(
     private val hardcodedId = "0"
 
     private object Columns {
-        val id = "id"
-        val content = "content"
+        const val id = "id"
+        const val content = "content"
     }
 
     override fun write(news: List<News>) {
-        val entities = mutableListOf<FlashBriefingEntry>()
-        for (newsItem in news){
-            entities.addAll(flashBriefingConverter.convert(newsItem))
-        }
+        val entities = news.flatMap { newsEntry -> flashBriefingConverter.convert(newsEntry) }
         val json = mapper.writeValueAsString(entities)
 
         logger.debug("Writing JSON to database: {}", json)

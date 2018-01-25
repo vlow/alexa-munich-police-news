@@ -9,12 +9,12 @@ object Configuration {
     /**
      * URI of the Polizei website which contains the news.
      */
-    val websiteURI = "https://www.polizei.bayern.de/muenchen/news/presse/aktuell/"
+    const val websiteURI = "https://www.polizei.bayern.de/muenchen/news/presse/aktuell/"
 
     /**
      * Name of the table in the DynamoDb.
      */
-    val tableName = "polizeiPressemeldungen"
+    const val tableName = "polizeiPressemeldungen"
 
     /**
      * AWS region for the DynamoDb.
