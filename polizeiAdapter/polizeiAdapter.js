@@ -46,20 +46,22 @@ exports.handler = (event, context, callback) => {
     };
     ddb.getItem(params, function(err, data) {
         if (err) {
-		// we do not expose the technical error to the caller,
-		// but we should still be able to find out about it...
-                console.log("Error", err);
+            // we won't expose the technical error to the caller,
+            // but we should still be able to find out about it...
+            console.log("Error", err);
+
 		    // return error
+            let errorMessage = JSON.stringify({
+                'message': 'Error while querying database.'
+            });
 		    let response = {
 			statusCode: 500,
 			headers: {
 			    "Content-Type": "application/json"
 			},
-			body: JSON.stringify({
-			    'message': 'Error while querying database.'
-			})
+			body: errorMessage
 		    };
-		    callback(null, response);
+		    callback(errorMessage, response);
         }
         else {
             // return cached police news     
