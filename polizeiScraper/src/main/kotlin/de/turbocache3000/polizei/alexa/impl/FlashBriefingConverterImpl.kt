@@ -4,8 +4,10 @@ import de.turbocache3000.polizei.alexa.api.FlashBriefingConverter
 import de.turbocache3000.polizei.alexa.api.FlashBriefingEntry
 import de.turbocache3000.polizei.log.api.Logger
 import de.turbocache3000.polizei.scraper.api.News
+import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.ZoneOffset
+import java.util.*
 
 class FlashBriefingConverterImpl(private val logger: Logger) : FlashBriefingConverter {
 
@@ -21,7 +23,7 @@ class FlashBriefingConverterImpl(private val logger: Logger) : FlashBriefingConv
     override fun convert(news: News): List<FlashBriefingEntry> {
         return news.entries.mapIndexed { index, entry ->
             FlashBriefingEntry(
-                    entry.id,
+                    generateIdForEntry(entry.title, entry.body),
                     generateTimestamp(news.date, index),
                     entry.title,
                     createBodyWithTitle(entry.title, entry.body),
@@ -59,5 +61,13 @@ class FlashBriefingConverterImpl(private val logger: Logger) : FlashBriefingConv
                 .plusSeconds(newsIndex.toLong())
                 .toInstant(ZoneOffset.UTC)
                 .toString()
+    }
+
+    /**
+     * Generates an ID in the UUID format based on the hash of message [title] and [body].
+     */
+    private fun generateIdForEntry(title: String, body: String): String {
+        val entryText = title + body
+        return UUID.nameUUIDFromBytes(entryText.toByteArray(StandardCharsets.UTF_8)).toString()
     }
 }

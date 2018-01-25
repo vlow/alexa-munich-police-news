@@ -8,10 +8,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.safety.Whitelist
 import java.net.URI
-import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 
@@ -119,7 +117,7 @@ class NewsScraperImpl(
 
         // Zip the entry titles and the entry bodies together to create the news entry
         val news = entryTitles.zip(entryBodies).map {
-            NewsEntry(generateIdForEntry(it.first, it.second), it.first, it.second)
+            NewsEntry(it.first, it.second)
         }
 
         return News(entry.uri, title, date, news)
@@ -134,13 +132,5 @@ class NewsScraperImpl(
 
         logger.debug("Extracted date is '{}'", dateString)
         return LocalDate.parse(dateString, DateTimeFormatter.ofPattern(datePattern))
-    }
-
-    /**
-     * Generates an ID in the UUID format based on the hash of message [title] and [body].
-     */
-    private fun generateIdForEntry(title: String, body: String): String {
-        val entryText = title + body
-        return UUID.nameUUIDFromBytes(entryText.toByteArray(StandardCharsets.UTF_8)).toString()
     }
 }
