@@ -8,7 +8,7 @@ import de.turbocache3000.polizei.scraper.api.News
 import de.turbocache3000.polizei.scraper.impl.NewsScraperImpl
 import java.net.URI
 
-class Core {
+object Core {
 
     /**
      * Updates the DynamoDB database entry to contain the most recent press announcements

@@ -23,7 +23,7 @@ class LambdaHandler {
         val logger = LamdbaLoggerImpl(context.logger)
 
         try {
-            Core().run(logger)
+            Core.run(logger)
         } catch (e: Exception) {
             logger.error("Exception occurred: {}", e.stacktraceAsString())
         }
