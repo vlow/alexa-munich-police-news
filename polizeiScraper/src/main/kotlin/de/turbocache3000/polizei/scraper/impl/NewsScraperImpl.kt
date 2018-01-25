@@ -39,11 +39,6 @@ class NewsScraperImpl(
      */
     private val datePattern = "dd.MM.yyyy"
 
-    /**
-     * Extracts the entry title from the caption.
-     */
-    private val titleExtractor = """[0-9]*. (.*)$""".toRegex()
-
     private object IndexSelectors {
         /**
          * News title on the index page.
@@ -119,21 +114,10 @@ class NewsScraperImpl(
 
         // Zip the entry titles and the entry bodies together to create the news entry
         val news = entryTitles.zip(entryBodies).map {
-            NewsEntry(generateIdForEntry(it.first, it.second), it.first, createBodyWithTitle(it.first, it.second))
+            NewsEntry(generateIdForEntry(it.first, it.second), it.first, it.second)
         }
 
         return News(entry.uri, title, date, news)
-    }
-
-    /**
-     * Adds the text part of the given [entryTitle] to the [body] and returns it as a new string.
-     */
-    private fun createBodyWithTitle(entryTitle: String, body: String): String {
-        logger.debug("Extracting the caption from the entryTitle '{}'", entryTitle)
-        val caption = titleExtractor.matchEntire(entryTitle)?.groups?.get(1)?.value ?: return body
-
-        logger.debug("Extracted caption is '{}'", caption)
-        return "$caption: $body"
     }
 
     /**

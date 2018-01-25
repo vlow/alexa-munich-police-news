@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
     val first = index.entries.firstOrNull()
     if (first != null) {
         val news = newsScraper.scrapeNews(first)
-        val flashBriefingConverter = FlashBriefingConverterImpl()
+        val flashBriefingConverter = FlashBriefingConverterImpl(ConsoleLogger)
         val database = DynamoDbDatabaseImpl(ConsoleLogger, Configuration.region, Configuration.tableName, flashBriefingConverter)
         database.write(news)
     }
