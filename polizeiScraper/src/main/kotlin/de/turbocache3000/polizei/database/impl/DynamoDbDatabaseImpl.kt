@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import de.turbocache3000.polizei.alexa.api.FlashBriefingConverter
+import de.turbocache3000.polizei.alexa.api.FlashBriefingEntry
 import de.turbocache3000.polizei.database.api.Database
 import de.turbocache3000.polizei.log.api.Logger
 import de.turbocache3000.polizei.scraper.api.News
@@ -26,8 +27,11 @@ class DynamoDbDatabaseImpl(
         val content = "content"
     }
 
-    override fun write(news: News) {
-        val entities = flashBriefingConverter.convert(news)
+    override fun write(news: List<News>) {
+        val entities = mutableListOf<FlashBriefingEntry>()
+        for (newsItem in news){
+            entities.addAll(flashBriefingConverter.convert(newsItem))
+        }
         val json = mapper.writeValueAsString(entities)
 
         logger.debug("Writing JSON to database: {}", json)

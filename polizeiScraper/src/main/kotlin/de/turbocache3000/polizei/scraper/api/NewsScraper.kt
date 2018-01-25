@@ -26,11 +26,13 @@ data class NewsIndex(
 )
 
 /**
- * News index entry. Consists of a [title] and a [uri] to the full news.
+ * News index entry. Consists of a [title], a [uri] to the full news, and the [addendum] flag.
+ * The [addendum] flag indicates, whether the index entry is an addendum to a previous news index.
  */
 data class NewsIndexEntry(
         val title: String,
-        val uri: URI
+        val uri: URI,
+        val addendum: Boolean
 )
 
 /**

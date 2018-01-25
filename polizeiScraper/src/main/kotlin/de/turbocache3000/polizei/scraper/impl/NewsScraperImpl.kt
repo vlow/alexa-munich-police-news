@@ -22,11 +22,16 @@ class NewsScraperImpl(
 ) : NewsScraper {
 
     /**
+     * The index page title indicating an addendum.
+     */
+    private val addendumIndexTitle = "^[0-9]*.?[ ]*Nachtrag.*$".toRegex()
+
+    /**
      * List of allowed titles from the index page.
      */
     private val allowedNewsTitles = listOf(
             "^Pressebericht.*$".toRegex(),
-            "^[0-9]*.?[ ]*Nachtrag.*$".toRegex()
+            addendumIndexTitle
     )
 
     /**
@@ -81,7 +86,7 @@ class NewsScraperImpl(
             val title = clean(e.select(IndexSelectors.TITLE).text())
             val href = e.select(IndexSelectors.LINK).attr("href")
 
-            NewsIndexEntry(title, baseURI.resolve(href))
+            NewsIndexEntry(title, baseURI.resolve(href), addendumIndexTitle.matches(title))
         })
     }
 
