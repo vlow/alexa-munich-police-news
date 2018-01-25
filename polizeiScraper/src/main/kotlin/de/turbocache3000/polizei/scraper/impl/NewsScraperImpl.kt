@@ -4,7 +4,6 @@ import de.turbocache3000.polizei.log.api.Logger
 import de.turbocache3000.polizei.scraper.api.*
 import net.jodah.failsafe.Failsafe
 import net.jodah.failsafe.RetryPolicy
-import org.apache.commons.codec.digest.Md5Crypt
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.safety.Whitelist
@@ -21,6 +20,7 @@ class NewsScraperImpl(
         private val baseURI: URI,
         private val logger: Logger
 ) : NewsScraper {
+
     /**
      * List of allowed titles from the index page.
      */
@@ -28,14 +28,21 @@ class NewsScraperImpl(
             "^Pressebericht.*$".toRegex(),
             "^Nachtrag.*$".toRegex()
     )
+
     /**
      * Extracts the date from a news title.
      */
     private val dateExtractor = """^.*?vom (\d\d.\d\d.\d\d\d\d)$""".toRegex()
+
     /**
      * Pattern to parse the date string in a [LocalDate].
      */
     private val datePattern = "dd.MM.yyyy"
+
+    /**
+     * Extracts the entry title from the caption.
+     */
+    private val titleExtractor = """[0-9]*. (.*)$""".toRegex()
 
     private object IndexSelectors {
         /**
@@ -109,12 +116,24 @@ class NewsScraperImpl(
         val entryBodies = doc.select(NewsSelectors.ENTRY_BODY).map { clean(it.text()) }
 
         logger.debug("Found {} entry titles and {} entry bodies", entryTitles.size, entryBodies.size)
+
         // Zip the entry titles and the entry bodies together to create the news entry
         val news = entryTitles.zip(entryBodies).map {
-            NewsEntry(generateIdForEntry(it.first, it.second), it.first, it.second)
+            NewsEntry(generateIdForEntry(it.first, it.second), it.first, createBodyWithTitle(it.first, it.second))
         }
 
         return News(entry.uri, title, date, news)
+    }
+
+    /**
+     * Adds the text part of the given [entryTitle] to the [body] and returns it as a new string.
+     */
+    private fun createBodyWithTitle(entryTitle: String, body: String): String {
+        logger.debug("Extracting the caption from the entryTitle '{}'", entryTitle)
+        val caption = titleExtractor.matchEntire(entryTitle)?.groups?.get(1)?.value ?: return body
+
+        logger.debug("Extracted caption is '{}'", caption)
+        return "$caption: $body"
     }
 
     /**
