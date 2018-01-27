@@ -29,6 +29,7 @@ class NewsScraperImpl(
      */
     private val allowedNewsTitles = listOf(
             "^Pressebericht.*$".toRegex(),
+            "^Pressemeldung.*$".toRegex(),
             addendumIndexTitle
     )
 
