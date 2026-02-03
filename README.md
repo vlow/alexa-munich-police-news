@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This project has been archived. It is no longer actively maintained, and the latest version no longer works due to changes made to the Polizei Bayern website.
+
 # alexa-munich-police-news
 The "Münchner Polizei Pressemeldungen"-flash-briefing-skill for the Amazon Alexa.
 
